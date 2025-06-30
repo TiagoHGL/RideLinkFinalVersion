@@ -1,0 +1,44 @@
+[build]
+  # Build command for Expo web
+  command = "npm run build:web"
+  # Directory where the built files are located
+  publish = "dist"
+
+[[redirects]]
+  # Redirect all requests that don't match a file to index.html
+  # This allows expo-router to handle client-side routing
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Additional configuration for better performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Cache static assets for 1 year
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    # Don't cache HTML files to ensure updates are served immediately
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    # Ensure the main HTML file is never cached
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+# Prevent caching of the service worker and manifest files
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
